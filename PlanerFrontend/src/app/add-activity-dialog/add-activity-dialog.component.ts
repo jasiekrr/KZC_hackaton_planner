@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-add-activity-dialog',
   templateUrl: './add-activity-dialog.component.html',
-  styleUrls: ['./add-activity-dialog.component.css']
+  styleUrls: ['./add-activity-dialog.component.css'],
 })
 export class AddActivityDialogComponent {
   activityForm: FormGroup;
@@ -30,7 +30,6 @@ export class AddActivityDialogComponent {
       format: ['', Validators.required],
       type: ['', Validators.required],
       deadline: ['', Validators.required],
-      done: [false]
     });
   }
 
@@ -41,6 +40,7 @@ export class AddActivityDialogComponent {
   }
 
   onCancel(): void {
+    console.log(this.activityForm)
     this.dialogRef.close();
   }
 }

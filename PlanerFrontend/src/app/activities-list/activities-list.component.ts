@@ -51,13 +51,13 @@ export class ActivitiesListComponent implements OnInit {
 
   toggleDone(element: Activity): void {
     element.done = !!!element.done;
-    console.log(element.done)
     this.updateActivityAsync(element);
   }
 
   openAddActivityDialog(): void {
     const dialogRef = this.dialog.open(AddActivityDialogComponent, {
-      width: '400px',
+      width: '600px', // Szerokość okna dialogowego
+      height: '1000x', // Wysokość okna dialogowego
       data: {
         subjects: this.subjects,
         teachers: this.teachers,
@@ -67,8 +67,9 @@ export class ActivitiesListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
+      console.log(result)
       if (result) {
-        console.log(result)
+        result.done = false;
         this.createActivityAsync(result)
       }
     });

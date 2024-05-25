@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCardModule } from '@angular/material/card';
 
 import { AppComponent } from './app.component';
 import { ActivitiesListComponent } from './activities-list/activities-list.component';
@@ -35,6 +36,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     ProgressSpinnerModule,
     MatCheckboxModule,
     MatAutocompleteModule,
+    MatCardModule,
     HttpClientModule,
     MatFormFieldModule,
     MatSelectModule,
