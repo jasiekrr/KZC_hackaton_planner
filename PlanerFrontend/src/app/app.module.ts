@@ -1,16 +1,17 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    RouterModule.forRoot([
+      { path: 'activities', loadChildren: () => import('./pages/auth/auth.module').then(x => x.AuthModule) },
+    ]),
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,39 @@
+{
+    "resolution": 15,
+    "days": [
+        {
+            "date": "2024-05-25T14:30:00Z",
+            "dayName": "poniedziałek",
+            "occupiedSlots":[
+                {
+                    "numberOfFirstSlot": 32,
+                    "durationInSlots": 6,
+                    "subjectName": "TGiS",
+                    "format": "laboratory",
+                    "activity": null
+                },
+                {
+                    "numberOfFirstSlot": 48,
+                    "durationInSlots": 6,
+                    "subjectName": "Matematyka 1",
+                    "format": "lecture",
+                    "activity": null
+                },
+                {
+                    "numberOfFirstSlot": 64,
+                    "durationInSlots": 6,
+                    "subjectName": "Fizyka 1",
+                    "format": "laboratory",
+                    "activity": "sprawko z lepkości cieczy"
+                },
+                {
+                    "numberOfFirstSlot": 70,
+                    "durationInSlots": 6,
+                    "subjectName": "M1",
+                    "format": "lecture",
+                    "activity": "sprawko z lepkości cieczy"
+                }
+            ]
+        }
+    ]
+}
