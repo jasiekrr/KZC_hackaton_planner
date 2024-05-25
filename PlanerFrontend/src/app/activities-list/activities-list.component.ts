@@ -15,18 +15,7 @@ export class ActivitiesListComponent implements OnInit {
   progressSpinnerVisible: boolean = true;
   awaitingPlayersSpinnerVisible: boolean = false;
 
-  activities: Activity[] = [
-    {
-      id: 1,
-      subjectName: 'TGiS',
-      mainTeacher: 'Zbigniew Tarapata',
-      format: 'lecture',
-      type: 'project',
-      deadline: new Date('2024-05-25T14:30:00Z'),
-      done: 'true'
-    },
-    // Dodaj tutaj więcej elementów, jeśli potrzebujesz
-  ];
+  activities: Activity[]
 
   constructor(private activiesHttpService: ActiviesHttpService) { }
 

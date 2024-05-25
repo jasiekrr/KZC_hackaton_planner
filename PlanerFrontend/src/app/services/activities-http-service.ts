@@ -35,12 +35,4 @@ export class ActiviesHttpService {
         return this.httpClient
             .get<Activity[]>(this.getActivitiesUrl, { headers: reqHeader });
     }
-
-    public getMockedActivities(): Observable<Activity[]> {
-        var reqHeader = new HttpHeaders({
-            'Content-Type': 'application/json',
-        });
-        return this.httpClient
-            .get<Activity[]>(this.getActivitiesUrl, { headers: reqHeader });
-    }
 }
