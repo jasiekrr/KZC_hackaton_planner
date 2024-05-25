@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Activity } from "../models/activity";
+import { Activity, UpdateActivityRequest } from "../models/activity";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -12,7 +12,7 @@ export class ActiviesHttpService {
 
     activities: Activity[] = [
         {
-          ID: 1,
+          Id: 1,
           subjectName: 'TGiS',
           mainTeacher: 'Zbigniew Tarapata',
           format: 'lecture',
@@ -37,7 +37,7 @@ export class ActiviesHttpService {
             .get<Activity[]>(this.getActivitiesUrl, { headers: reqHeader });
     }
 
-    public updateActivity(activity: Activity): Observable<Activity> {
+    public updateActivity(activity: UpdateActivityRequest): Observable<Activity> {
         var reqHeader = new HttpHeaders({
             'Content-Type': 'application/json',
         });

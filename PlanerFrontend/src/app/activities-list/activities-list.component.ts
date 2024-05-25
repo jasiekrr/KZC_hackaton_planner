@@ -1,6 +1,6 @@
 // src/app/subject-list/subject-list.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Activity } from '../models/activity';
+import { Activity, UpdateActivityRequest } from '../models/activity';
 import { ActiviesHttpService } from '../services/activities-http-service';
 import {
   Observable,
@@ -10,6 +10,8 @@ import {
   of,
   switchMap,
 } from 'rxjs';
+import { AddActivityDialogComponent } from '../add-activity-dialog/add-activity-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-activities-list',
@@ -29,19 +31,49 @@ export class ActivitiesListComponent implements OnInit {
   awaitingPlayersSpinnerVisible: boolean = false;
 
   activities: Activity[] = [];
+  subjects: string[] = [];
+  teachers: string[] = [];
+  formats: string[] = [];
+  types: string[] = [];
 
-  constructor(private activiesHttpService: ActiviesHttpService) {}
+  constructor(
+    private activiesHttpService: ActiviesHttpService,
+    public dialog: MatDialog
+  ) {}
 
   async ngOnInit(): Promise<void> {
     const activities$ = this.activiesHttpService.getActivities();
     var activities = await lastValueFrom(this.loadData(activities$));
 
     this.activities = activities;
+    this.updateDropdownCollections();
   }
 
   toggleDone(element: Activity): void {
-    element.done = !element.done;
+    element.done = !!element.done;
+    element.done = !!element.done;
     this.updateActivityAsync(element);
+  }
+
+  openAddActivityDialog(): void {
+    const dialogRef = this.dialog.open(AddActivityDialogComponent, {
+      width: '400px',
+      data: {
+        subjects: this.subjects,
+        teachers: this.teachers,
+        formats: this.formats,
+        types: this.types,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.activities.push({
+          ...result,
+          id: this.activities.length + 1,
+        });
+      }
+    });
   }
 
   private loadData(obs$: Observable<any>): Observable<any> {
@@ -51,13 +83,46 @@ export class ActivitiesListComponent implements OnInit {
     );
   }
 
-  private async updateActivityAsync(activity: Activity){
-    const activity$ = this.activiesHttpService.updateActivity(activity);
-    var obtainedActivity = await lastValueFrom(this.loadData(activity$));
+  private async updateActivityAsync(activity: Activity) {
+    const updateActivityRequest: UpdateActivityRequest = {
+      Id: activity.Id,
+      studentId: 1,
+      subjectName: activity.subjectName,
+      mainTeacher: activity.mainTeacher,
+      format: activity.format,
+      type: activity.type,
+      deadline: activity.deadline.toString(),
+      done: String(activity.done),
+    };
 
-    const activities$ = this.activiesHttpService.getActivities();
-    var activities = await lastValueFrom(this.loadData(activities$));
+    const activity$ = this.activiesHttpService.updateActivity(
+      updateActivityRequest
+    );
+  }
 
-    this.activities = activities;
+  private updateDropdownCollections() {
+    const uniqueSubjects = [
+      ...new Set(this.activities.map((activity) => activity.subjectName)),
+    ];
+
+    this.subjects = uniqueSubjects;
+
+    const uniqueTeachers = [
+      ...new Set(this.activities.map((activity) => activity.mainTeacher)),
+    ];
+
+    this.teachers = uniqueTeachers;
+
+    const uniqueFormats = [
+      ...new Set(this.activities.map((activity) => activity.format)),
+    ];
+
+    this.formats = uniqueFormats;
+
+    const uniqueTypes = [
+      ...new Set(this.activities.map((activity) => activity.type)),
+    ];
+
+    this.types = uniqueTypes;
   }
 }
