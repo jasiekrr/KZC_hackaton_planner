@@ -62,7 +62,7 @@ subjects = [
      }
 ]
 
-activities = {}
+activities: dict = {}
 
 
 @app.post("/activities/")
@@ -71,8 +71,6 @@ def create_activity(activity: Annotated[ActivityRequest, Body()]):
     ID_counter += 1
     tempID = ID_counter
     subj = activity.subjectName
-    if subj not in activities:
-        activities[subj] = {}
     newActivity = Activity()
     newActivity.__dict__ = activity.__dict__.copy()
 
@@ -84,7 +82,14 @@ def create_activity(activity: Annotated[ActivityRequest, Body()]):
 
 @app.get("/activities/")
 def read_activities():
-    return activities
+    return list(activities.values())
+
+
+@app.get("/activities/{index}")
+def read_activities(index: int):
+    if index not in activities:
+        return 404
+    return activities[index]
 
 
 @app.put("/activities/")
@@ -96,23 +101,31 @@ async def create_activity(activity: Annotated[ChangeActivityRequest, Body()]):
         oldActivity.__dict__ = activity.__dict__.copy()
         return activity
 
+@app.delete("/activities/{index}", status_code=200)
+def remove_act(index: int):
+    if index not in activities:
+        return 404
+    del activities[index]
 
 
 
 @app.get("/subjects/")
 def read_subjects():
-    print("wchodzi")
-    return subjects
+    answer_dict = {}
+    answer_dict["semesterEnds"] = "2024-05-25T14:30:00Z"
+    answer_dict["overallEcts"] = 30
+    answer_dict["subjects"] = subjects
+    return answer_dict
 
 
-@app.get("/nowy/")
-def sztuczny_create():
-    subjects.append({"subjectName": "UpdatedSubject", "mainTeacher": "Jane Smith", "ects": 6,
-                     "formats": [{"formatType": "seminar", "numberOfHours": 60},
-                                 {"formatType": "practical", "numberOfHours": 55}]})
-    return {"subjectName": "UpdatedSubject", "mainTeacher": "Jane Smith", "ects": 6,
-            "formats": [{"formatType": "seminar", "numberOfHours": 60},
-                        {"formatType": "practical", "numberOfHours": 55}]}
+# @app.get("/nowy/")
+# def sztuczny_create():
+#     subjects.append({"subjectName": "UpdatedSubject", "mainTeacher": "Jane Smith", "ects": 6,
+#                      "formats": [{"formatType": "seminar", "numberOfHours": 60},
+#                                  {"formatType": "practical", "numberOfHours": 55}]})
+#     return {"subjectName": "UpdatedSubject", "mainTeacher": "Jane Smith", "ects": 6,
+#             "formats": [{"formatType": "seminar", "numberOfHours": 60},
+#                         {"formatType": "practical", "numberOfHours": 55}]}
 
 
 @app.get("/subjects/{index}")
