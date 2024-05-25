@@ -1,9 +1,9 @@
 export interface Activity{
-    id: number;
+    ID: number;
     subjectName: string;
     mainTeacher: string;
     format: string;
     type: string;
     deadline: Date;
-    done: string;
+    done: boolean;
 }

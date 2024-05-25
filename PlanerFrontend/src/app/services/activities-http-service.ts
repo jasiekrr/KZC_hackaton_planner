@@ -8,17 +8,17 @@ import { Observable } from "rxjs";
 })
 export class ActiviesHttpService {
 
-    private readonly getActivitiesUrl = "https://localhost:7032/activities";
+    private readonly getActivitiesUrl = "http://localhost:8000/activities";
 
     activities: Activity[] = [
         {
-          id: 1,
+          ID: 1,
           subjectName: 'TGiS',
           mainTeacher: 'Zbigniew Tarapata',
           format: 'lecture',
           type: 'project',
           deadline: new Date('2024-05-25T14:30:00Z'),
-          done: 'true'
+          done: true
         },
         // Dodaj tutaj więcej elementów, jeśli potrzebujesz
       ];
@@ -32,7 +32,17 @@ export class ActiviesHttpService {
         var reqHeader = new HttpHeaders({
             'Content-Type': 'application/json',
         });
+
         return this.httpClient
             .get<Activity[]>(this.getActivitiesUrl, { headers: reqHeader });
+    }
+
+    public updateActivity(activity: Activity): Observable<Activity> {
+        var reqHeader = new HttpHeaders({
+            'Content-Type': 'application/json',
+        });
+
+        return this.httpClient
+            .put<Activity>(this.getActivitiesUrl, activity, { headers: reqHeader });
     }
 }
