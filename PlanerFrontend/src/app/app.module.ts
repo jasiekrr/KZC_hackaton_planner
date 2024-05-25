@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { AppComponent } from './app.component';
 import { ActivitiesListComponent } from './activities-list/activities-list.component';
@@ -17,6 +18,8 @@ import { AddActivityDialogComponent } from './add-activity-dialog/add-activity-d
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -31,14 +34,17 @@ import { MatInputModule } from '@angular/material/input';
     MatTableModule,
     ProgressSpinnerModule,
     MatCheckboxModule,
+    MatAutocompleteModule,
     HttpClientModule,
     MatFormFieldModule,
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
+    MatNativeDateModule,
     MatButtonModule,
     MatDialogModule,
     MatInputModule,
+    MatDatepickerModule,
     RouterModule.forRoot([
       { path: 'activities', component: ActivitiesListComponent },
     ]),

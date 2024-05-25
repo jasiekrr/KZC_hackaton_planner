@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Activity, UpdateActivityRequest } from "../models/activity";
+import { Activity, CreateActivityRequest, CreateActivityResponse, UpdateActivityRequest } from "../models/activity";
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -44,5 +44,14 @@ export class ActiviesHttpService {
 
         return this.httpClient
             .put<Activity>(this.getActivitiesUrl, activity, { headers: reqHeader });
+    }
+
+    public createActivity(activity: CreateActivityRequest): Observable<CreateActivityResponse> {
+        var reqHeader = new HttpHeaders({
+            'Content-Type': 'application/json',
+        });
+
+        return this.httpClient
+            .post<CreateActivityResponse>(this.getActivitiesUrl, activity, { headers: reqHeader });
     }
 }

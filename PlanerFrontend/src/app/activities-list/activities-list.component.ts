@@ -1,6 +1,6 @@
 // src/app/subject-list/subject-list.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Activity, UpdateActivityRequest } from '../models/activity';
+import { Activity, CreateActivityRequest, UpdateActivityRequest } from '../models/activity';
 import { ActiviesHttpService } from '../services/activities-http-service';
 import {
   Observable,
@@ -50,8 +50,8 @@ export class ActivitiesListComponent implements OnInit {
   }
 
   toggleDone(element: Activity): void {
-    element.done = !!element.done;
-    element.done = !!element.done;
+    element.done = !!!element.done;
+    console.log(element.done)
     this.updateActivityAsync(element);
   }
 
@@ -68,10 +68,8 @@ export class ActivitiesListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.activities.push({
-          ...result,
-          id: this.activities.length + 1,
-        });
+        console.log(result)
+        this.createActivityAsync(result)
       }
     });
   }
@@ -98,6 +96,32 @@ export class ActivitiesListComponent implements OnInit {
     const activity$ = this.activiesHttpService.updateActivity(
       updateActivityRequest
     );
+
+    var activityValue = await lastValueFrom(this.loadData(activity$));
+  }
+
+  private async createActivityAsync(activity: Activity) {
+    const createActivityRequest: CreateActivityRequest = {
+      studentId: 1,
+      subjectName: activity.subjectName,
+      mainTeacher: activity.mainTeacher,
+      format: activity.format,
+      type: activity.type,
+      deadline: activity.deadline.toString(),
+      done: String(activity.done),
+    };
+
+    const activity$ = this.activiesHttpService.createActivity(
+      createActivityRequest
+    );
+
+    var activities = await lastValueFrom(this.loadData(activity$));
+
+    const activities$ = this.activiesHttpService.getActivities();
+    var activities = await lastValueFrom(this.loadData(activities$));
+
+    this.activities = activities;
+    this.updateDropdownCollections();
   }
 
   private updateDropdownCollections() {

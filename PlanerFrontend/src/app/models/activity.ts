@@ -18,3 +18,24 @@ export interface UpdateActivityRequest{
     deadline: string;
     done: string;
 }
+
+export interface CreateActivityRequest{
+    studentId: number;
+    subjectName: string;
+    mainTeacher: string;
+    format: string;
+    type: string;
+    deadline: string;
+    done: string;
+}
+
+export interface CreateActivityResponse{
+    Id: number,
+    studentId: number;
+    subjectName: string;
+    mainTeacher: string;
+    format: string;
+    type: string;
+    deadline: string;
+    done: string;
+}
