@@ -1,7 +1,6 @@
 from fastapi import FastAPI, HTTPException, Body
 from pydantic import BaseModel
 from typing import List, Annotated
-import json
 import os
 
 ID_counter: int = 0
@@ -12,22 +11,33 @@ is_data_up_to_date = False  # when program begins data is not read from the file
 
 subjects = {
     "1": {"subjectName": "TGiS",
-     "mainTeacher": "Zbigniew Tarapata",
-     "ects": 4,
-     "formats": [
-         {
-             "formatType": "lecture",
-             "numberOfHours": 30
-         },
-         {
-             "formatType": "laboratory",
-             "numberOfHours": 40
-         }
-     ]
-     }
+          "mainTeacher": "Zbigniew Tarapata",
+          "ects": 4,
+          "formats": [
+              {
+                  "formatType": "lecture",
+                  "numberOfHours": 30
+              },
+              {
+                  "formatType": "laboratory",
+                  "numberOfHours": 40
+              }
+          ]
+          }
 }
 
+przedmiotyWybieralne = ["TGiS", "WdA", "TIiK", "MD1", "MD2", "MM", "M1", "M2", "AM", "WDI", "WDP", "PO", "PW", "OWI"]
+prowadzacyWybieralni = ["Zbigniew Tarapata", "Wlodzimierz Kwiatkowski", "Andrzej Chojnacki", "Arkadiusz Szymaniec",
+                        "Dariusz Pierzchala", "Tadeusz Nowicki", "Radoslaw Rulka", "Typ od OWI"]
+rygoryWybieralne = ["Zaliczenie", "Egzamin", "Kolokwium", "DOWALONE KOLOKWIUM", "sprawozdanie", "projekt",
+                    "projekt semestralny", "ciezkie sprawozdanie"]
+
+przedmiotyWybieralne.sort()
+prowadzacyWybieralni.sort()
+rygoryWybieralne.sort()
+
 activities: dict = {}
+
 
 class Activity:
     studentId: int
@@ -38,7 +48,6 @@ class Activity:
     deadline: str
     done: str
     Id: int
-
 
 
 def read_data():
@@ -58,14 +67,11 @@ def read_data():
                     activity.__dict__ = eval(jsondict[key]).copy()
                     activities[int(key)] = activity
 
-
-
-    if  os.path.exists(subjFileName):
+    if os.path.exists(subjFileName):
         with open(subjFileName, "r") as f:
             all_subjects = f.readlines()
             for sub in all_subjects:
                 pass
-
 
 
 if is_data_up_to_date is False:
@@ -73,8 +79,22 @@ if is_data_up_to_date is False:
     print("\n----------Data was read from the database, app is ready for work---------\n")
     is_data_up_to_date = True
 
-
 app = FastAPI()
+
+
+@app.get("/choices/prow/")
+def get_prowadzacy():
+    return prowadzacyWybieralni
+
+
+@app.get("/choices/przed/")
+def get_przedmioten():
+    return przedmiotyWybieralne
+
+
+@app.get("/choices/rygory")
+def get_rygoren():
+    return rygoryWybieralne
 
 
 def write_data(what_to_write):
@@ -87,13 +107,14 @@ def write_data(what_to_write):
     if what_to_write == "sub":
         with open(subjFileName, "w") as f:
             for key, val in subjects.items():
-                f.write( str({str(key) : str(val.__dict__)}) + "\n")
+                f.write(str({str(key): str(val.__dict__)}) + "\n")
     elif what_to_write == "act":
         with open(actFileName, "w") as f:
             for key, val in activities.items():
                 print(key, val.__dict__)
 
                 f.write(str({str(key): str(val.__dict__)}) + "\n")
+
 
 class Subject(BaseModel):
     subjectName: str
@@ -122,18 +143,11 @@ class ChangeActivityRequest(BaseModel):
     done: str
 
 
-
-
-
-
-
-
 @app.post("/activities/")
 def create_activity(activity: Annotated[ActivityRequest, Body()]):
     global ID_counter
     ID_counter += 1
     tempID = ID_counter
-    subj = activity.subjectName
     newActivity = Activity()
     newActivity.__dict__ = activity.__dict__.copy()
 
@@ -166,13 +180,13 @@ async def change_activity(activity: Annotated[ChangeActivityRequest, Body()]):
         write_data("act")
         return activity
 
+
 @app.delete("/activities/{index}", status_code=200)
 def remove_act(index: int):
     if index not in activities:
         return 404
     del activities[index]
     write_data("act")
-
 
 
 @app.get("/subjects/")
@@ -206,22 +220,22 @@ def create_subject(subject: Annotated[Subject, Body()]):
 
 
 @app.put("/subjects/{id}")
-def update_subject(id: int, subject: Subject):
+def update_subject(Id: int, subject: Subject):
     for index, s in enumerate(subjects):
-        if s["subjectName"] == id:
+        if s["subjectName"] == Id:
             subjects[index] = subject.dict()
             return subject
     raise HTTPException(status_code=404, detail="Subject not found")
 
 
 @app.delete("/subjects/{id}")
-async def delete_subject(id: int):
+async def delete_subject(Id: int):
     global subjects
-    subjects = [s for s in subjects if s["subjectName"] != id]
-    return {"detail": f"Subject {id} deleted"}
+    subjects = [s for s in subjects if s["subjectName"] != Id]
+    return {"detail": f"Subject {Id} deleted"}
 
 
 if __name__ == "__main__":
-
     import uvicorn
+
     uvicorn.run(app, host="127.0.0.1", port=8000)

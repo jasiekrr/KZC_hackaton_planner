@@ -9,3 +9,7 @@ tj. absolutny szczyt technologii jakim jest zapisywanie wszystkiego w olbrzymich
 
 Zajęło to zdecydowanie więcej czasu niż powinno, ale ***działa!!!!!!***
 Profesjonalna baza danych jest
+
+
+Dane są pod adresem /choices/...
+do wyboru są prow - prowadzący, przed - przedmioty oraz rygory - czyli rygory XD
