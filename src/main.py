@@ -88,7 +88,7 @@ def create_activity(activity: Annotated[ActivityRequest, Body()]):
     newActivity.__dict__ = activity.__dict__.copy()
 
     newActivity.done = "false"
-    newActivity.ID = tempID
+    newActivity.Id = tempID
     activities[tempID] = newActivity
     return newActivity
 
@@ -108,7 +108,7 @@ def read_activities(index: int):
 @app.put("/activities/")
 async def create_activity(activity: Annotated[ChangeActivityRequest, Body()]):
     subj = activity.subjectName
-    changedID = activity.ID
+    changedID = activity.Id
     if changedID in activities:
         oldActivity = activities[changedID]
         oldActivity.__dict__ = activity.__dict__.copy()
