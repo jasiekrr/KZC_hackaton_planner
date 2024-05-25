@@ -37,7 +37,7 @@ class ActivityRequest(BaseModel):
 
 
 class ChangeActivityRequest(BaseModel):
-    ID: int
+    id: int
     studentId: int
     subjectName: str
     mainTeacher: str
@@ -55,7 +55,7 @@ class Activity:
     type: str
     deadline: str
     done: str
-    ID: int
+    id: int
 
 
 subjects = [
