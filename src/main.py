@@ -36,8 +36,8 @@ subjects = {
 
 przedmiotyWybieralne = ["TGiS", "WdA", "TIiK", "MD1", "MD2", "MM", "M1", "M2", "AM", "WDI", "WDP", "PO", "PW", "OWI"]
 prowadzacyWybieralni = ["Zbigniew Tarapata", "Wlodzimierz Kwiatkowski", "Andrzej Chojnacki", "Arkadiusz Szymaniec",
-                        "Dariusz Pierzchala", "Tadeusz Nowicki", "Radoslaw Rulka", "Typ od OWI"]
-rygoryWybieralne = ["Zaliczenie", "Egzamin", "Kolokwium", "DOWALONE KOLOKWIUM", "sprawozdanie", "projekt",
+                        "Dariusz Pierzchala", "Tadeusz Nowicki", "Radoslaw Rulka", "Michał Gąsiński"]
+rygoryWybieralne = ["Zaliczenie", "Egzamin", "Kolokwium", "czysta formalność", "sprawozdanie", "projekt",
                     "projekt semestralny", "ciezkie sprawozdanie"]
 
 przedmiotyWybieralne.sort()
