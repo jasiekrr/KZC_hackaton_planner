@@ -48,6 +48,8 @@ export class ActivitiesListComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const activities$ = this.activiesHttpService.getActivities();
+    console.log(this.activities)
+
     var activities = await lastValueFrom(this.loadData(activities$));
 
     this.activities = activities;
