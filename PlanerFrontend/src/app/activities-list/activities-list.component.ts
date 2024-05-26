@@ -26,6 +26,7 @@ export class ActivitiesListComponent implements OnInit {
     'type',
     'deadline',
     'done',
+    'actions'
   ];
   progressSpinnerVisible: boolean = true;
   awaitingPlayersSpinnerVisible: boolean = false;
@@ -52,7 +53,6 @@ export class ActivitiesListComponent implements OnInit {
 
     this.getPredefinedEnums();
     this.updateDropdownCollections();
-
     this.updateProgressBar()
   }
 
@@ -76,12 +76,20 @@ export class ActivitiesListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(result)
-      if (result) {
-        result.done = false;
-        this.createActivityAsync(result)
+      if (result && result.multiplier > 0) {
+        const activityData = { ...result, done: false };
+        const count = result.multiplier;
+  
+        Array.from({ length: count }).forEach(async () => {
+          await this.createActivityAsync(activityData);
+        });
       }
     });
+  }
+
+  removeActivity(element: Activity){
+    console.log("usuwam se")
+    this.activiesHttpService.deleteActivity(element.Id);
   }
 
   private loadData(obs$: Observable<any>): Observable<any> {

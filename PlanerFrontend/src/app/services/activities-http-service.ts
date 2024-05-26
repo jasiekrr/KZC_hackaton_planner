@@ -61,6 +61,17 @@ export class ActiviesHttpService {
             .post<CreateActivityResponse>(this.getActivitiesUrl, activity, { headers: reqHeader });
     }
 
+    public deleteActivity(activityId: number) {
+        var reqHeader = new HttpHeaders({
+            'Content-Type': 'application/json',
+        });
+
+        console.log(this.getActivitiesUrl+'/'+activityId)
+
+        return this.httpClient
+            .delete(this.getActivitiesUrl+'/'+activityId, { headers: reqHeader });
+    }
+
     public getSubjects(): Observable<string[]> {
         var reqHeader = new HttpHeaders({
             'Content-Type': 'application/json',
