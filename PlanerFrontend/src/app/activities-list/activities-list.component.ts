@@ -46,6 +46,8 @@ export class ActivitiesListComponent implements OnInit {
     var activities = await lastValueFrom(this.loadData(activities$));
 
     this.activities = activities;
+    
+    this.getPredefinedEnums();
     this.updateDropdownCollections();
   }
 
@@ -168,5 +170,10 @@ export class ActivitiesListComponent implements OnInit {
     const formats$ = this.activiesHttpService.getSubjects();
     var formats = await lastValueFrom(this.loadData(formats$));
     this.formats = formats;
+
+    console.log(this.subjects);
+    console.log(this.teachers);
+    console.log(this.formats);
+
   }
 }

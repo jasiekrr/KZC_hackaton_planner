@@ -16,7 +16,6 @@ export class ActiviesHttpService {
 
     private readonly getFormatsUrl = "http://localhost:8000/choices/rygory";
 
-
     activities: Activity[] = [
         {
           Id: 1,
