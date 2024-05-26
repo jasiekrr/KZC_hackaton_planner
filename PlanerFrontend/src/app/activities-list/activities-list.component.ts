@@ -87,9 +87,17 @@ export class ActivitiesListComponent implements OnInit {
     });
   }
 
-  removeActivity(element: Activity){
-    console.log("usuwam se")
-    this.activiesHttpService.deleteActivity(element.Id);
+  async removeActivity(element: Activity){
+    await this.activiesHttpService.deleteActivity(element.Id).toPromise();
+
+    const activities$ = this.activiesHttpService.getActivities();
+    var activities = await lastValueFrom(this.loadData(activities$));
+
+    this.activities = activities;
+
+    this.getPredefinedEnums();
+    this.updateDropdownCollections();
+    this.updateProgressBar()
   }
 
   private loadData(obs$: Observable<any>): Observable<any> {

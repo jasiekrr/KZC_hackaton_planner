@@ -41,7 +41,6 @@ export class AddActivityDialogComponent {
   }
 
   onCancel(): void {
-    console.log(this.activityForm)
     this.dialogRef.close();
   }
 }
