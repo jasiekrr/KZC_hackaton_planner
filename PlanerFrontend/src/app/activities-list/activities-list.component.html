@@ -1,4 +1,5 @@
 <button mat-raised-button color="primary" (click)="openAddActivityDialog()">Dodaj Aktywność</button>
+
 <table mat-table [dataSource]="activities" class="mat-elevation-z8">
   <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
@@ -62,5 +63,3 @@
   <mat-progress-bar mode="determinate" [value]="progressBarValue" style="height: 100%; background-color: #f0f0f0;">
   </mat-progress-bar>
 </mat-card>
-
-

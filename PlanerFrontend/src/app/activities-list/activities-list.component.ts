@@ -65,8 +65,8 @@ export class ActivitiesListComponent implements OnInit {
 
   openAddActivityDialog(): void {
     const dialogRef = this.dialog.open(AddActivityDialogComponent, {
-      width: '600px', // Szerokość okna dialogowego
-      height: '1000x', // Wysokość okna dialogowego
+      // width: '300px', // Szerokość okna dialogowego
+      // height: '1000x', // Wysokość okna dialogowego
       data: {
         subjects: this.subjects,
         teachers: this.teachers,
