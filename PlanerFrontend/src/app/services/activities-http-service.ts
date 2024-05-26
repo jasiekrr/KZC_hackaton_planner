@@ -10,6 +10,13 @@ export class ActiviesHttpService {
 
     private readonly getActivitiesUrl = "http://localhost:8000/activities";
 
+    private readonly getSubjectsUrl = "http://localhost:8000/choices/przed";
+
+    private readonly getTeachersUrl = "http://localhost:8000/choices/prow";
+
+    private readonly getFormatsUrl = "http://localhost:8000/choices/rygory";
+
+
     activities: Activity[] = [
         {
           Id: 1,
@@ -53,5 +60,32 @@ export class ActiviesHttpService {
 
         return this.httpClient
             .post<CreateActivityResponse>(this.getActivitiesUrl, activity, { headers: reqHeader });
+    }
+
+    public getSubjects(): Observable<string[]> {
+        var reqHeader = new HttpHeaders({
+            'Content-Type': 'application/json',
+        });
+
+        return this.httpClient
+            .get<string[]>(this.getSubjectsUrl, { headers: reqHeader });
+    }
+
+    public getTeachers(): Observable<string[]> {
+        var reqHeader = new HttpHeaders({
+            'Content-Type': 'application/json',
+        });
+
+        return this.httpClient
+            .get<string[]>(this.getTeachersUrl, { headers: reqHeader });
+    }
+
+    public getFormats(): Observable<string[]> {
+        var reqHeader = new HttpHeaders({
+            'Content-Type': 'application/json',
+        });
+
+        return this.httpClient
+            .get<string[]>(this.getFormatsUrl, { headers: reqHeader });
     }
 }

@@ -122,6 +122,8 @@ export class ActivitiesListComponent implements OnInit {
     var activities = await lastValueFrom(this.loadData(activities$));
 
     this.activities = activities;
+
+    this.getPredefinedEnums();
     this.updateDropdownCollections();
   }
 
@@ -130,24 +132,41 @@ export class ActivitiesListComponent implements OnInit {
       ...new Set(this.activities.map((activity) => activity.subjectName)),
     ];
 
-    this.subjects = uniqueSubjects;
+    this.subjects = [ ...this.subjects, ...uniqueSubjects];
+    this.subjects = [...new Set(this.subjects)]
 
     const uniqueTeachers = [
       ...new Set(this.activities.map((activity) => activity.mainTeacher)),
     ];
 
-    this.teachers = uniqueTeachers;
+    this.teachers = [ ...this.teachers, ...uniqueTeachers];
+    this.teachers = [...new Set(this.teachers)]
 
     const uniqueFormats = [
       ...new Set(this.activities.map((activity) => activity.format)),
     ];
 
-    this.formats = uniqueFormats;
+    this.formats = [ ...this.formats, ...uniqueFormats];
+    this.formats = [...new Set(this.formats)]
 
     const uniqueTypes = [
       ...new Set(this.activities.map((activity) => activity.type)),
     ];
 
     this.types = uniqueTypes;
+  }
+
+  private async getPredefinedEnums() {
+    const subjects$ = this.activiesHttpService.getSubjects();
+    var subjects = await lastValueFrom(this.loadData(subjects$));
+    this.subjects = subjects;
+
+    const teachers$ = this.activiesHttpService.getSubjects();
+    var teachers = await lastValueFrom(this.loadData(teachers$));
+    this.teachers = teachers;
+
+    const formats$ = this.activiesHttpService.getSubjects();
+    var formats = await lastValueFrom(this.loadData(formats$));
+    this.formats = formats;
   }
 }
