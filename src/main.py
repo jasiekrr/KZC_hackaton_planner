@@ -1,3 +1,5 @@
+import datetime
+
 from fastapi import Body
 from pydantic import BaseModel
 from typing import List, Annotated
@@ -44,6 +46,7 @@ rygoryWybieralne.sort()
 
 activities: dict = {}
 
+slownikiTaskow = {}
 
 class Activity:
     studentId: int
@@ -55,6 +58,24 @@ class Activity:
     done: str
     Id: int
 
+
+pureActivities = [{"studentID" : 1, "subjectName": "WdA", "mainTeacher": "Wlodzimierz Kwiatkowski",
+                  "format": "wyklad", "type": "kolokwium", "timeNeeded": 120, "deadline": datetime.datetime(2024,5,30),
+                   "done": "false", "Id": 1},
+                  {"studentID": 1, "subjectName": "TIiK", "mainTeacher": "Wlodzimierz Kwiatkowski",
+                   "format": "cwiczenia", "type": "cwiczenia", "timeNeeded": 90, "deadline": datetime.datetime(2024, 5, 28),
+                   "done": "false", "Id": 1},
+    {"studentID": 1, "subjectName": "TIiK", "mainTeacher": "Wlodzimierz Kwiatkowski", "format": "cwiczenia", "type": "cwiczenia", "timeNeeded": 90, "deadline": "2024-05-28T00:00:00", "done": "false", "Id": 1},
+    {"studentID": 1, "subjectName": "M2", "mainTeacher": "Arkadiusz Szymaniec", "format": "wyklad", "type": "wyklad", "timeNeeded": 60, "deadline": "2024-06-01T00:00:00", "done": "false", "Id": 2},
+    {"studentID": 1, "subjectName": "FI", "mainTeacher": "Jan Kowalski", "format": "lab", "type": "lab", "timeNeeded": 120, "deadline": "2024-06-05T00:00:00", "done": "false", "Id": 3},
+    {"studentID": 1, "subjectName": "PO", "mainTeacher": "Tadeusz Nowicki", "format": "wyklad", "type": "wyklad", "timeNeeded": 90, "deadline": "2024-06-08T00:00:00", "done": "true", "Id": 4},
+    {"studentID": 1, "subjectName": "MD2", "mainTeacher": "Andrzej Chojnacki", "format": "seminar", "type": "seminarium", "timeNeeded": 75, "deadline": "2024-06-10T00:00:00", "done": "false", "Id": 5},
+    {"studentID": 1, "subjectName": "MM", "mainTeacher": "Andrzej Chojnacki", "format": "lecture", "type": "wykład", "timeNeeded": 45, "deadline": "2024-06-15T00:00:00", "done": "true", "Id": 6},
+    {"studentID": 1, "subjectName": "MD1", "mainTeacher": "Arkadiusz Szymaniec", "format": "cwiczenia", "type": "praca dom", "timeNeeded": 120, "deadline": "2024-06-25T00:00:00", "done": "false", "Id": 8},
+    {"studentID": 1, "subjectName": "AM", "mainTeacher": "Arkadziusz Szymaniec", "format": "cwiczenia", "type": "prezentacja", "timeNeeded": 90, "deadline": "2024-06-30T00:00:00", "done": "true", "Id": 9},
+    {"studentID": 1, "subjectName": "WF", "mainTeacher": "Michal Gąsiński", "format": "cwiczenia", "type": "bieganie po lesie", "timeNeeded": 60, "deadline": "2024-07-05T00:00:00", "done": "false", "Id": 10},
+    {"studentID": 1, "subjectName": "WdA", "mainTeacher": "Włodzimierz Kwiatkowski", "format": "project", "type": "projekt", "timeNeeded": 150, "deadline": "2024-07-10T00:00:00", "done": "false", "Id": 11}
+]
 
 def read_data():
     global ID_counter
@@ -72,7 +93,11 @@ def read_data():
                     activity = Activity()
                     activity.__dict__ = eval(jsondict[key]).copy()
                     activities[int(key)] = activity
-
+    else:
+        for wpis in pureActivities:
+            temp = Activity()
+            temp.__dict__ = wpis
+            activities[temp.Id] = temp
 
     if os.path.exists(subjFileName):
         with open(subjFileName, "r") as f:
@@ -136,6 +161,7 @@ class ActivityRequest(BaseModel):
     mainTeacher: str
     format: str
     type: str
+    timeNeeded: int
     deadline: str
 
 
@@ -146,6 +172,7 @@ class ChangeActivityRequest(BaseModel):
     mainTeacher: str
     format: str
     type: str
+    timeNeeded: int
     deadline: str
     done: str
 
@@ -163,6 +190,21 @@ def create_activity(activity: Annotated[ActivityRequest, Body()]):
     activities[tempID] = newActivity
     write_data("act")
     return newActivity
+
+
+    # studentId: int
+    # subjectName: str
+    # mainTeacher: str
+    # format: str
+    # type: str
+    # deadline: str
+    # done: str
+    # Id: int
+
+
+
+
+
 
 
 @app.get("/activities/")
