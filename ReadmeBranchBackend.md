@@ -10,34 +10,14 @@ tj. absolutny szczyt technologii jakim jest zapisywanie wszystkiego w olbrzymich
 Zajęło to zdecydowanie więcej czasu niż powinno, ale ***działa!!!!!!***
 Profesjonalna baza danych jest
 
-
 Dane są pod adresem /choices/...
 do wyboru są prow - prowadzący, przed - przedmioty oraz rygory - czyli rygory XD
 
-Format dodawania taska:
 
-zrobić POST pod adres /tasks/
-{
-        "task": "Task 1",
-        "studentID": 1,
-        "start": "2024-05-28T21:00:00",
-        "end": "2024-05-28T23:30:00"
-    }
 
-dodawanie timeframe:
+Work to do in this branch:
 
-zrobić POST pod adresem /timeframes/
-{
-    "start" : "2024-05-28 18:00",
-    "end" : "2024-05-28 20:00"
-}
-
-planowanie:
-
-zrobić POST pod adresem /plan/ (puste body)
-
-wyświetlenie tasków:
-GET pod adresem /tasks/
-
-wyświetlanie zaplanowanych:
-GET pod adresem /planne_tasks/
+stworzyć algorytm planujący te przeklęte godziny. Na chwilę obecną nie ma jeszcze synchronizacji z frontendem
+więc póki co będzie to po prostu hard-zakodowane w kod (chodzi tu o implementację samego algorytmu)
+planowana implementacja - zadanie z najkrótszym deadline idzie pierwsze.
+Gdy oba zadania mają ten sam deadline - najpierw przydzielane jest to krótsze

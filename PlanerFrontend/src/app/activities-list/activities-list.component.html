@@ -1,0 +1,70 @@
+<button mat-raised-button color="primary" (click)="openAddActivityDialog()">Dodaj Aktywność</button>
+
+<table mat-table [dataSource]="activities" class="mat-elevation-z8">
+  <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="subjectName">
+    <th mat-header-cell *matHeaderCellDef>Przedmiot</th>
+    <td mat-cell *matCellDef="let element">{{ element.subjectName }}</td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="mainTeacher">
+    <th mat-header-cell *matHeaderCellDef>Prowadzący</th>
+    <td mat-cell *matCellDef="let element">{{ element.mainTeacher }}</td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="format">
+    <th mat-header-cell *matHeaderCellDef>Rygor</th>
+    <td mat-cell *matCellDef="let element">{{ element.format }}</td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="type">
+    <th mat-header-cell *matHeaderCellDef>Rodzaj aktywności</th>
+    <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="deadline">
+    <th mat-header-cell *matHeaderCellDef>Termin</th>
+    <td mat-cell *matCellDef="let element">{{ element.deadline | date:'yyyy-MM-dd'}}</td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="done">
+    <th mat-header-cell *matHeaderCellDef> Zakończono </th>
+    <td mat-cell *matCellDef="let element">
+      <mat-checkbox [checked]="element.done" (change)="toggleDone(element)"></mat-checkbox>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="timeNeeded">
+    <th mat-header-cell *matHeaderCellDef>Szacowany czas</th>
+    <td mat-cell *matCellDef="let element">{{ element.timeNeeded }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let element">
+      <button mat-icon-button color="warn" (click)="removeActivity(element)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
+<div class="progress-spinner" *ngIf="progressSpinnerVisible">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+
+<mat-card style="height: 50px; border-radius: 10px; box-shadow: 0 2px 4px rgba(5, 181, 69, 0.1);">
+  <mat-progress-bar mode="determinate" [value]="progressBarValue" style="height: 100%; background-color: #f0f0f0;">
+  </mat-progress-bar>
+</mat-card>

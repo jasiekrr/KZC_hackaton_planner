@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../../../STUDIA/rok5/Semestr 6/Magisterka/vscode"
+		},
+		{
+			"path": "../../../STUDIA/rok5/Semestr 6/Magisterka/vscode/tests"
+		}
+	],
+	"settings": {
+		"terminal.integrated.gpuAcceleration": "on"
+	}
+}

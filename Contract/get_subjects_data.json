@@ -1,0 +1,51 @@
+{
+  "semesterEnds": "2024-05-25T14:30:00Z",
+  "overallEcts": 30,
+  "subjects": [
+    {
+      "subjectName": "TGiS",
+      "mainTeacher": "Zbigniew Tarapata",
+      "ects": 4,
+      "formats": [
+        {
+          "formatType": "lecture",
+          "numberOfHours": 30
+        },
+        {
+          "formatType": "laboratory",
+          "numberOfHours": 40
+        }
+      ]
+    },
+    {
+      "subjectName": "BD",
+      "mainTeacher": "Jarosław Koszela",
+      "ects": 6,
+      "formats": [
+        {
+          "formatType": "lecture",
+          "numberOfHours": 40
+        },
+        {
+          "formatType": "laboratory",
+          "numberOfHours": 60
+        }
+      ]
+    },
+    {
+      "subjectName": "M1",
+      "mainTeacher": "Arkadiusz Szymaniec",
+      "ects": 8,
+      "formats": [
+        {
+          "formatType": "lecture",
+          "numberOfHours": 30
+        },
+        {
+          "formatType": "excercise",
+          "numberOfHours": 40
+        }
+      ]
+    }
+  ]
+}

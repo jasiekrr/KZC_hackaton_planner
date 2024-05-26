@@ -1,20 +1,12 @@
-import datetime
-
-from fastapi import Body
+from fastapi import FastAPI, HTTPException, Body
 from pydantic import BaseModel
 from typing import List, Annotated
 import os
 
-from fastapi import FastAPI, HTTPException, Depends
-from typing import List
-
-from src.planer import Task, TaskPlanner, TimeFrame, get_task_planner
-
 ID_counter: int = 0
-task_ID_counter: int = 0
+
 actFileName = "activities.txt"
 subjFileName = "subjects.txt"
-taskFilename = "tasks.txt"
 is_data_up_to_date = False  # when program begins data is not read from the files - it needs to read it in order to work
 
 subjects = {
@@ -36,8 +28,8 @@ subjects = {
 
 przedmiotyWybieralne = ["TGiS", "WdA", "TIiK", "MD1", "MD2", "MM", "M1", "M2", "AM", "WDI", "WDP", "PO", "PW", "OWI"]
 prowadzacyWybieralni = ["Zbigniew Tarapata", "Wlodzimierz Kwiatkowski", "Andrzej Chojnacki", "Arkadiusz Szymaniec",
-                        "Dariusz Pierzchala", "Tadeusz Nowicki", "Radoslaw Rulka", "Michał Gąsiński"]
-rygoryWybieralne = ["Zaliczenie", "Egzamin", "Kolokwium", "czysta formalność", "sprawozdanie", "projekt",
+                        "Dariusz Pierzchala", "Tadeusz Nowicki", "Radoslaw Rulka", "Typ od OWI"]
+rygoryWybieralne = ["Zaliczenie", "Egzamin", "Kolokwium", "DOWALONE KOLOKWIUM", "sprawozdanie", "projekt",
                     "projekt semestralny", "ciezkie sprawozdanie"]
 
 przedmiotyWybieralne.sort()
@@ -46,7 +38,7 @@ rygoryWybieralne.sort()
 
 activities: dict = {}
 
-slownikiTaskow = {}
+from fastapi.middleware.cors import CORSMiddleware
 
 class Activity:
     studentId: int
@@ -58,24 +50,6 @@ class Activity:
     done: str
     Id: int
 
-
-pureActivities = [{"studentID" : 1, "subjectName": "WdA", "mainTeacher": "Wlodzimierz Kwiatkowski",
-                  "format": "wyklad", "type": "kolokwium", "timeNeeded": 120, "deadline": datetime.datetime(2024,5,30),
-                   "done": "false", "Id": 1},
-                  {"studentID": 1, "subjectName": "TIiK", "mainTeacher": "Wlodzimierz Kwiatkowski",
-                   "format": "cwiczenia", "type": "cwiczenia", "timeNeeded": 90, "deadline": datetime.datetime(2024, 5, 28),
-                   "done": "false", "Id": 1},
-    {"studentID": 1, "subjectName": "TIiK", "mainTeacher": "Wlodzimierz Kwiatkowski", "format": "cwiczenia", "type": "cwiczenia", "timeNeeded": 90, "deadline": "2024-05-28T00:00:00", "done": "false", "Id": 1},
-    {"studentID": 1, "subjectName": "M2", "mainTeacher": "Arkadiusz Szymaniec", "format": "wyklad", "type": "wyklad", "timeNeeded": 60, "deadline": "2024-06-01T00:00:00", "done": "false", "Id": 2},
-    {"studentID": 1, "subjectName": "FI", "mainTeacher": "Jan Kowalski", "format": "lab", "type": "lab", "timeNeeded": 120, "deadline": "2024-06-05T00:00:00", "done": "false", "Id": 3},
-    {"studentID": 1, "subjectName": "PO", "mainTeacher": "Tadeusz Nowicki", "format": "wyklad", "type": "wyklad", "timeNeeded": 90, "deadline": "2024-06-08T00:00:00", "done": "true", "Id": 4},
-    {"studentID": 1, "subjectName": "MD2", "mainTeacher": "Andrzej Chojnacki", "format": "seminar", "type": "seminarium", "timeNeeded": 75, "deadline": "2024-06-10T00:00:00", "done": "false", "Id": 5},
-    {"studentID": 1, "subjectName": "MM", "mainTeacher": "Andrzej Chojnacki", "format": "lecture", "type": "wykład", "timeNeeded": 45, "deadline": "2024-06-15T00:00:00", "done": "true", "Id": 6},
-    {"studentID": 1, "subjectName": "MD1", "mainTeacher": "Arkadiusz Szymaniec", "format": "cwiczenia", "type": "praca dom", "timeNeeded": 120, "deadline": "2024-06-25T00:00:00", "done": "false", "Id": 8},
-    {"studentID": 1, "subjectName": "AM", "mainTeacher": "Arkadziusz Szymaniec", "format": "cwiczenia", "type": "prezentacja", "timeNeeded": 90, "deadline": "2024-06-30T00:00:00", "done": "true", "Id": 9},
-    {"studentID": 1, "subjectName": "WF", "mainTeacher": "Michal Gąsiński", "format": "cwiczenia", "type": "bieganie po lesie", "timeNeeded": 60, "deadline": "2024-07-05T00:00:00", "done": "false", "Id": 10},
-    {"studentID": 1, "subjectName": "WdA", "mainTeacher": "Włodzimierz Kwiatkowski", "format": "project", "type": "projekt", "timeNeeded": 150, "deadline": "2024-07-10T00:00:00", "done": "false", "Id": 11}
-]
 
 def read_data():
     global ID_counter
@@ -93,11 +67,6 @@ def read_data():
                     activity = Activity()
                     activity.__dict__ = eval(jsondict[key]).copy()
                     activities[int(key)] = activity
-    else:
-        for wpis in pureActivities:
-            temp = Activity()
-            temp.__dict__ = wpis
-            activities[temp.Id] = temp
 
     if os.path.exists(subjFileName):
         with open(subjFileName, "r") as f:
@@ -112,6 +81,18 @@ if is_data_up_to_date is False:
     is_data_up_to_date = True
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:4200"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"], # Allows all methods
+    allow_headers=["*"], # Allows all headers
+)
 
 
 @app.get("/choices/prow/")
@@ -161,7 +142,6 @@ class ActivityRequest(BaseModel):
     mainTeacher: str
     format: str
     type: str
-    timeNeeded: int
     deadline: str
 
 
@@ -172,7 +152,6 @@ class ChangeActivityRequest(BaseModel):
     mainTeacher: str
     format: str
     type: str
-    timeNeeded: int
     deadline: str
     done: str
 
@@ -190,21 +169,6 @@ def create_activity(activity: Annotated[ActivityRequest, Body()]):
     activities[tempID] = newActivity
     write_data("act")
     return newActivity
-
-
-    # studentId: int
-    # subjectName: str
-    # mainTeacher: str
-    # format: str
-    # type: str
-    # deadline: str
-    # done: str
-    # Id: int
-
-
-
-
-
 
 
 @app.get("/activities/")
@@ -282,86 +246,6 @@ async def delete_subject(Id: int):
     global subjects
     subjects = [s for s in subjects if s["subjectName"] != Id]
     return {"detail": f"Subject {Id} deleted"}
-
-
-
-
-# @app.post("/tasks/")
-# async def create_task(task: Task, task_planner: TaskPlanner = Depends(get_task_planner)):
-#     global task_ID_counter
-#     task_ID_counter += 1
-#
-#     print("Wchodzi w create task")
-#     task_planner.add_task(task)
-#     return {"message": "Task added successfully."}
-#
-# @app.post("/timeframes/")
-# async def create_time_frame(time_frame: TimeFrame, task_planner: TaskPlanner = Depends(get_task_planner)):
-#     task_planner.add_time_frame(time_frame)
-#     return {"message": "Time frame added successfully."}
-#
-# @app.post("/plan/")
-# async def plan_tasks(task_planner: TaskPlanner = Depends(get_task_planner)):
-#     task_planner.plan_tasks()
-#     return {"message": "Tasks have been planned."}
-#
-# @app.get("/tasks/")
-# async def read_all_tasks(task_planner: TaskPlanner = Depends(get_task_planner)):
-#     all_tasks = task_planner.list_all_tasks()
-#     return all_tasks
-#
-# @app.get("/planned_tasks/")
-# async def read_planned_tasks(task_planner: TaskPlanner = Depends(get_task_planner)):
-#     planned_tasks = task_planner.list_planned_tasks()
-#     return planned_tasks
-#
-
-
-@app.post("/tasks/")
-async def create_task(task: Task, task_planner: TaskPlanner = Depends(get_task_planner)):
-    global task_ID_counter
-    task_ID_counter+= 1
-    task.taskID = task_ID_counter
-    task_planner.add_task(task)
-    return {"message": "Task added successfully."}
-
-@app.post("/timeframes/")
-async def create_time_frame(time_frame: TimeFrame, task_planner: TaskPlanner = Depends(get_task_planner)):
-    task_planner.add_time_frame(time_frame)
-    return {"message": "Time frame added successfully."}
-
-@app.post("/plan/")
-async def plan_tasks(task_planner: TaskPlanner = Depends(get_task_planner)):
-    task_planner.plan_tasks()
-    return {"message": "Tasks have been planned."}
-
-@app.get("/tasks/")
-async def read_all_tasks(task_planner: TaskPlanner = Depends(get_task_planner)):
-    all_tasks = task_planner.list_all_tasks()
-    return all_tasks
-
-@app.get("/planned_tasks/")
-async def read_planned_tasks(task_planner: TaskPlanner = Depends(get_task_planner)):
-    planned_tasks = task_planner.list_planned_tasks()
-    print(3*"\n", planned_tasks, 3*'\n')
-    return planned_tasks
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == "__main__":

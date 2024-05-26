@@ -1,0 +1,7 @@
+table {
+  width: 100%;
+}
+
+::ng-deep .ui-progressbar {
+  height: 30px; /* Ustawia wysokość paska postępu na 30 pikseli */
+}
