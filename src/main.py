@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Body
 from pydantic import BaseModel
 from typing import List, Annotated
 import os
-
+from fastapi.middleware.cors import CORSMiddleware
 ID_counter: int = 0
 
 actFileName = "activities.txt"
