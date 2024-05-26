@@ -1,12 +1,18 @@
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import Body
 from pydantic import BaseModel
 from typing import List, Annotated
 import os
 
-ID_counter: int = 0
+from fastapi import FastAPI, HTTPException, Depends
+from typing import List
 
+from src.planer import Task, TaskPlanner, TimeFrame, get_task_planner
+
+ID_counter: int = 0
+task_ID_counter: int = 0
 actFileName = "activities.txt"
 subjFileName = "subjects.txt"
+taskFilename = "tasks.txt"
 is_data_up_to_date = False  # when program begins data is not read from the files - it needs to read it in order to work
 
 subjects = {
@@ -66,6 +72,7 @@ def read_data():
                     activity = Activity()
                     activity.__dict__ = eval(jsondict[key]).copy()
                     activities[int(key)] = activity
+
 
     if os.path.exists(subjFileName):
         with open(subjFileName, "r") as f:
@@ -233,6 +240,86 @@ async def delete_subject(Id: int):
     global subjects
     subjects = [s for s in subjects if s["subjectName"] != Id]
     return {"detail": f"Subject {Id} deleted"}
+
+
+
+
+# @app.post("/tasks/")
+# async def create_task(task: Task, task_planner: TaskPlanner = Depends(get_task_planner)):
+#     global task_ID_counter
+#     task_ID_counter += 1
+#
+#     print("Wchodzi w create task")
+#     task_planner.add_task(task)
+#     return {"message": "Task added successfully."}
+#
+# @app.post("/timeframes/")
+# async def create_time_frame(time_frame: TimeFrame, task_planner: TaskPlanner = Depends(get_task_planner)):
+#     task_planner.add_time_frame(time_frame)
+#     return {"message": "Time frame added successfully."}
+#
+# @app.post("/plan/")
+# async def plan_tasks(task_planner: TaskPlanner = Depends(get_task_planner)):
+#     task_planner.plan_tasks()
+#     return {"message": "Tasks have been planned."}
+#
+# @app.get("/tasks/")
+# async def read_all_tasks(task_planner: TaskPlanner = Depends(get_task_planner)):
+#     all_tasks = task_planner.list_all_tasks()
+#     return all_tasks
+#
+# @app.get("/planned_tasks/")
+# async def read_planned_tasks(task_planner: TaskPlanner = Depends(get_task_planner)):
+#     planned_tasks = task_planner.list_planned_tasks()
+#     return planned_tasks
+#
+
+
+@app.post("/tasks/")
+async def create_task(task: Task, task_planner: TaskPlanner = Depends(get_task_planner)):
+    global task_ID_counter
+    task_ID_counter+= 1
+    task.taskID = task_ID_counter
+    task_planner.add_task(task)
+    return {"message": "Task added successfully."}
+
+@app.post("/timeframes/")
+async def create_time_frame(time_frame: TimeFrame, task_planner: TaskPlanner = Depends(get_task_planner)):
+    task_planner.add_time_frame(time_frame)
+    return {"message": "Time frame added successfully."}
+
+@app.post("/plan/")
+async def plan_tasks(task_planner: TaskPlanner = Depends(get_task_planner)):
+    task_planner.plan_tasks()
+    return {"message": "Tasks have been planned."}
+
+@app.get("/tasks/")
+async def read_all_tasks(task_planner: TaskPlanner = Depends(get_task_planner)):
+    all_tasks = task_planner.list_all_tasks()
+    return all_tasks
+
+@app.get("/planned_tasks/")
+async def read_planned_tasks(task_planner: TaskPlanner = Depends(get_task_planner)):
+    planned_tasks = task_planner.list_planned_tasks()
+    print(3*"\n", planned_tasks, 3*'\n')
+    return planned_tasks
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 if __name__ == "__main__":
