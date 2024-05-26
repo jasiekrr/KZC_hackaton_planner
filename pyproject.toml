@@ -6,7 +6,7 @@ authors = ["uxert <uxert@wp.pl>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 uvicorn = "^0.29.0"
 fastapi = "^0.111.0"
 
