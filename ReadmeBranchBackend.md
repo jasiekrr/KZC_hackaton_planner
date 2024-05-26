@@ -10,6 +10,14 @@ tj. absolutny szczyt technologii jakim jest zapisywanie wszystkiego w olbrzymich
 Zajęło to zdecydowanie więcej czasu niż powinno, ale ***działa!!!!!!***
 Profesjonalna baza danych jest
 
-
 Dane są pod adresem /choices/...
 do wyboru są prow - prowadzący, przed - przedmioty oraz rygory - czyli rygory XD
+
+
+
+Work to do in this branch:
+
+stworzyć algorytm planujący te przeklęte godziny. Na chwilę obecną nie ma jeszcze synchronizacji z frontendem
+więc póki co będzie to po prostu hard-zakodowane w kod (chodzi tu o implementację samego algorytmu)
+planowana implementacja - zadanie z najkrótszym deadline idzie pierwsze.
+Gdy oba zadania mają ten sam deadline - najpierw przydzielane jest to krótsze
