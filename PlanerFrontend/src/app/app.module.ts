@@ -21,6 +21,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -46,12 +49,16 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatButtonModule,
     MatDialogModule,
     MatInputModule,
+    ToastModule,
     MatDatepickerModule,
+    MatProgressBarModule,
     RouterModule.forRoot([
       { path: 'activities', component: ActivitiesListComponent },
     ]),
   ],
-  providers: [],
+  providers: [
+    MessageService
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

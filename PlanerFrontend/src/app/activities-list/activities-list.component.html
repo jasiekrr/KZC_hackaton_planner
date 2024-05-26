@@ -48,3 +48,10 @@
 <div class="progress-spinner" *ngIf="progressSpinnerVisible">
   <p-progressSpinner></p-progressSpinner>
 </div>
+
+<mat-card style="height: 50px; border-radius: 10px; box-shadow: 0 2px 4px rgba(5, 181, 69, 0.1);">
+  <mat-progress-bar mode="determinate" [value]="progressBarValue" style="height: 100%; background-color: #f0f0f0;">
+  </mat-progress-bar>
+</mat-card>
+
+

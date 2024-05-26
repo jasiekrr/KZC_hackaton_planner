@@ -38,6 +38,7 @@ rygoryWybieralne.sort()
 
 activities: dict = {}
 
+from fastapi.middleware.cors import CORSMiddleware
 
 class Activity:
     studentId: int
@@ -80,6 +81,18 @@ if is_data_up_to_date is False:
     is_data_up_to_date = True
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:4200"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"], # Allows all methods
+    allow_headers=["*"], # Allows all headers
+)
 
 
 @app.get("/choices/prow/")

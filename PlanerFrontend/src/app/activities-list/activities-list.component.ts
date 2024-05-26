@@ -1,5 +1,5 @@
 // src/app/subject-list/subject-list.component.ts
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Activity, CreateActivityRequest, UpdateActivityRequest } from '../models/activity';
 import { ActiviesHttpService } from '../services/activities-http-service';
 import {
@@ -30,6 +30,8 @@ export class ActivitiesListComponent implements OnInit {
   progressSpinnerVisible: boolean = true;
   awaitingPlayersSpinnerVisible: boolean = false;
 
+  progressBarValue = 0;
+
   activities: Activity[] = [];
   subjects: string[] = [];
   teachers: string[] = [];
@@ -38,7 +40,8 @@ export class ActivitiesListComponent implements OnInit {
 
   constructor(
     private activiesHttpService: ActiviesHttpService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -46,14 +49,18 @@ export class ActivitiesListComponent implements OnInit {
     var activities = await lastValueFrom(this.loadData(activities$));
 
     this.activities = activities;
-    
+
     this.getPredefinedEnums();
     this.updateDropdownCollections();
+
+    this.updateProgressBar()
   }
 
   toggleDone(element: Activity): void {
-    element.done = !!!element.done;
+    element.done = (element.done.toString() == "true");
+    element.done = !element.done
     this.updateActivityAsync(element);
+    this.updateProgressBar();
   }
 
   openAddActivityDialog(): void {
@@ -163,17 +170,20 @@ export class ActivitiesListComponent implements OnInit {
     var subjects = await lastValueFrom(this.loadData(subjects$));
     this.subjects = subjects;
 
-    const teachers$ = this.activiesHttpService.getSubjects();
+    const teachers$ = this.activiesHttpService.getTeachers();
     var teachers = await lastValueFrom(this.loadData(teachers$));
     this.teachers = teachers;
 
-    const formats$ = this.activiesHttpService.getSubjects();
+    const formats$ = this.activiesHttpService.getFormats();
     var formats = await lastValueFrom(this.loadData(formats$));
     this.formats = formats;
+  }
 
-    console.log(this.subjects);
-    console.log(this.teachers);
-    console.log(this.formats);
+  private updateProgressBar(){
+    const overall = this.activities.length
+    const done = this.activities.filter(x => x.done == true || x.done.toString() == "true").length
+    this.progressBarValue = done / overall * 100
 
+    this.cdRef.detectChanges();
   }
 }
