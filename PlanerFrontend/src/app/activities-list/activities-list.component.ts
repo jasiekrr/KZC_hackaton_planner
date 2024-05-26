@@ -26,6 +26,7 @@ export class ActivitiesListComponent implements OnInit {
     'type',
     'deadline',
     'done',
+    'timeNeeded',
     'actions'
   ];
   progressSpinnerVisible: boolean = true;
@@ -54,6 +55,8 @@ export class ActivitiesListComponent implements OnInit {
     this.getPredefinedEnums();
     this.updateDropdownCollections();
     this.updateProgressBar()
+
+    console.log(this.activities)
   }
 
   toggleDone(element: Activity): void {
@@ -135,6 +138,7 @@ export class ActivitiesListComponent implements OnInit {
       type: activity.type,
       deadline: activity.deadline.toString(),
       done: String(activity.done),
+      timeNeeded: activity.timeNeeded
     };
 
     const activity$ = this.activiesHttpService.createActivity(

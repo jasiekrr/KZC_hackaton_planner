@@ -16,19 +16,7 @@ export class ActiviesHttpService {
 
     private readonly getFormatsUrl = "http://localhost:8000/choices/rygory";
 
-    activities: Activity[] = [
-        {
-          Id: 1,
-          subjectName: 'TGiS',
-          mainTeacher: 'Zbigniew Tarapata',
-          format: 'lecture',
-          type: 'project',
-          deadline: new Date('2024-05-25T14:30:00Z'),
-          done: true
-        },
-        // Dodaj tutaj więcej elementów, jeśli potrzebujesz
-      ];
-    
+    activities: Activity[] = [ ];    
 
     constructor(private httpClient: HttpClient){
 

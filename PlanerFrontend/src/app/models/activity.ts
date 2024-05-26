@@ -6,6 +6,7 @@ export interface Activity{
     type: string;
     deadline: Date;
     done: boolean;
+    timeNeeded: number;
 }
 
 export interface UpdateActivityRequest{
@@ -27,6 +28,7 @@ export interface CreateActivityRequest{
     type: string;
     deadline: string;
     done: string;
+    timeNeeded: number;
 }
 
 export interface CreateActivityResponse{

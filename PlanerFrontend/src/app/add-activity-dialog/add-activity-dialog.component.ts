@@ -30,7 +30,8 @@ export class AddActivityDialogComponent {
       format: ['', Validators.required],
       type: ['', Validators.required],
       deadline: ['', Validators.required],
-      multiplier: [1, Validators.required]
+      multiplier: [1, Validators.required],
+      timeNeeded: [1.5, Validators.required]
     });
   }
 
